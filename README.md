@@ -27,9 +27,11 @@ Kui rida täitub, kustutab süsteem selle automaatselt ja lisab kasutajale skoor
 Prototüübi vaated:
  Lisatud visuaalsed eskiisid (vt pilt):
  ![Prototüüp](prototyyp.jpg)
- 
+
 •	Avaleht "Alusta mängu" nupuga
+
 •	Mängulaua vaade, kukkuva kujundiga
+
 •	Täitunud rea eemaldamine
 
 6. Testfaili nimi ja kirjeldus:
