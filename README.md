@@ -4,7 +4,8 @@ Teostaja: Anneli Sepp
 Grupp: Targe24
 
 1. Projekti nimi: Tetris – Klassikaline loogikamäng
-2. Teostaja: Anneli Sepp - arendaja
+    Teostaja: Anneli Sepp - arendaja
+    Teostaja: Edgar Muoni - arendaja
 
 3. Projekti idee – lühikirjeldus:
 Loome klassikalise Tetrise mängu lihtsustatud versiooni, kus mängija juhib ülevalt alla kukkuvaid kujundeid (tetromino’sid), eesmärgiga täita horisontaalseid ridu ja koguda punkte. Mängu liides on loodud Tkinteri abil. Soovime just klassikalise luua, kuna üks meist on just sellest puudust tundnud.
@@ -36,7 +37,7 @@ Fail: tetris.py
  Skript käivitab mängu demo. tetris.py
 
 8. GitHubi repositoorium:
-GitHub repo link: https://github.com/Annelisss/tetris-projekt.git
+GitHub repo link: https://github.com/Annelisss/tetris-projekt-meeskond.git
 
 9. Halduskeskkond
 Projekti ülesannete haldamiseks kasutame Trellot.  
