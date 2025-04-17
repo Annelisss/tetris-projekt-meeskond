@@ -1,15 +1,11 @@
 # tetris-projekt
 Aine: Programmeerimise alused
-Meeskond: Anneli Sepp, Edgar Muoni
-Grupp: Targe24 ja Targe23
-
-Ülesanne: Mõelge oma projektile ja looge "paber" prototüüp. Ilma koodita paberil tehke eskiis, mis vaated ja tegevused teie projekti käigus tehtud peaks saama.
-Tehke vähemalt kolm kasutajalugu ja koostage nendele vaated ja tegevused. Lisage oma github repostiooriumisse.
+Meeskond: Anneli Sepp
+Grupp: Targe24
 
 1. Projekti nimi: Tetris – Klassikaline loogikamäng
 2. Rühma liikmed:
 Anneli Sepp - arendaja
-Edgar Muoni - arendaja
 
 3. Projekti idee – lühikirjeldus:
 Loome klassikalise Tetrise mängu lihtsustatud versiooni, kus mängija juhib ülevalt alla kukkuvaid kujundeid (tetromino’sid), eesmärgiga täita horisontaalseid ridu ja koguda punkte. Mängu liides on loodud Tkinteri abil. Soovime just klassikalise luua, kuna üks meist on just sellest puudust tundnud.
