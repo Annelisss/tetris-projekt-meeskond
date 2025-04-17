@@ -13,7 +13,7 @@ Loome klassikalise Tetrise mängu lihtsustatud versiooni, kus mängija juhib ül
 4. Kasutajaliides Tkinter
 5. Kasutajalood ja prototüübi eskiisid:
 Kasutajalugu 1 – Mängu alustamine:
-Kasutaja vajutab "Alusta mängu" nuppu ja mängulaud ilmub.
+Kasutaja vajutab "Alusta mängu" nuppu ja mängulaud ilmub. Ilmub esimene kujund, mis liigub alla suunas.
 Kasutajalugu 2 – Kujundi juhtimine
 Kasutaja saab kujundeid liigutada klaviatuuriklahvide abil:
 A – vasakule
