@@ -1,11 +1,10 @@
 # tetris-projekt
 Aine: Programmeerimise alused
-Meeskond: Anneli Sepp
+Teostaja: Anneli Sepp
 Grupp: Targe24
 
 1. Projekti nimi: Tetris – Klassikaline loogikamäng
-2. Rühma liikmed:
-Anneli Sepp - arendaja
+2. Teostaja: Anneli Sepp - arendaja
 
 3. Projekti idee – lühikirjeldus:
 Loome klassikalise Tetrise mängu lihtsustatud versiooni, kus mängija juhib ülevalt alla kukkuvaid kujundeid (tetromino’sid), eesmärgiga täita horisontaalseid ridu ja koguda punkte. Mängu liides on loodud Tkinteri abil. Soovime just klassikalise luua, kuna üks meist on just sellest puudust tundnud.
