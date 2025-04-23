@@ -5,10 +5,10 @@ import pygame
 import threading
 
 # Board configuration
-BOARD_WIDTH = 10
+BOARD_WIDTH = 15
 BOARD_HEIGHT = 20
 NORMAL_TICK = 300  # Normal fall speed in milliseconds
-FAST_TICK = 50
+FAST_TICK = 5 # Fast fall speed in milliseconds
 
 # Tetromino shapes
 TETROMINOES = {
@@ -82,7 +82,7 @@ def rotate(shape):
 def run_tetris():
     """Main Tetris game loop."""
     # --- Start Game Popup ---
-    start_layout = [[sg.Text("Do wish you wanna play Tetris?")], [sg.Button("Start")]]
+    start_layout = [[sg.Text("Click the Start button to play Tetris!")], [sg.Button("Start")]]
     start_window = sg.Window("Start Game", start_layout, finalize=True)
     start_event, _ = start_window.read()
     start_window.close()
