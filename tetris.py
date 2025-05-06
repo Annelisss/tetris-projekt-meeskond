@@ -5,10 +5,10 @@ import pygame
 import threading
 
 # Board configuration
-BOARD_WIDTH = 15
+BOARD_WIDTH = 12
 BOARD_HEIGHT = 20
 NORMAL_TICK = 300  # Normal fall speed in milliseconds
-FAST_TICK = 5 # Fast fall speed in milliseconds
+FAST_TICK = 0.5 # Fast fall speed in milliseconds
 
 # Tetromino shapes
 TETROMINOES = {
