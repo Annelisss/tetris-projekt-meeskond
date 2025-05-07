@@ -2,7 +2,7 @@
 
 **Aine:** Programmeerimise alused  
 **Meeskond:** Anneli Sepp, Edgar Muoni  
-**Grupp:** Targe24  
+**Grupp:** Targe24
 
 ## 1. Projekti nimi  
 **Tetris – Klassikaline loogikamäng**
@@ -30,7 +30,7 @@ Kasutaja juhib nooleklahvidega kujundit, mis kukub ülevalt alla.
 **Kasutajalugu 3 – Rea täitumine ja eemaldamine**  
 Kui rida täitub, kustutab süsteem selle automaatselt ja lisab kasutajale skoori.
 
-**Prototüübi vaated:**  
+**Prototüübi vaated**  
 Lisatud visuaalsed eskiisid (vt pilt):  
 ![Prototüüp](prototyyp.jpg)
 
@@ -47,20 +47,20 @@ Skript käivitab mängu või liidese demo. Näiteks:
 **Link:** https://github.com/Annelisss/tetris-projekt.git
 
 ## 8. Halduskeskkond  
-Projekti ülesannete haldamiseks kasutame **Trellot**.  
-**Trello tahvel:** https://trello.com/invite/b/67fd7b84150ebc07898ed82c/ATTI885052c2fc9cee9744dac5b616944db30CCFE7A4/tetris-projekt
+Projekti ülesannete haldamiseks kasutame **Trellot**  
+**Trello tahvel:** [Tetris projekt Trellos](https://trello.com/invite/b/67fd7b84150ebc07898ed82c/ATTI885052c2fc9cee9744dac5b616944db30CCFE7A4/tetris-projekt)
 
 ## 9. Tööetapid ja vastutusjaotus
 
-### Projekti idee ja tehnoloogiate valik  
+### 1. Projekti idee ja tehnoloogiate valik  
 Mõlemad liikmed panustasid võrdselt projekti idee väljamõtlemisse. Otsustasime luua klassikalise Tetrise mängu, kasutades Tkinterit kasutajaliidese jaoks ja pygame'i taustamuusika mängimiseks.
 
-### GitHubi projekt ja versioonihaldus  
-- Loodi ühine GitHubi repositoorium.  
-- Mõlemad liikmed lisasid oma testfailid (`test_anneli.py`, `test_edgar.py`).  
-- README.md faili dokumentatsioon koostati koos.
+### 2. GitHubi projekt ja versioonihaldus  
+- Loodi ühine GitHubi repositoorium  
+- Mõlemad liikmed lisasid oma testfailid (`test_anneli.py`, `test_edgar.py`)  
+- README.md faili dokumentatsioon koostati koos
 
-### Koodiarendus ja programmeerimine
+### 3. Koodiarendus ja programmeerimine
 
 **Anneli vastutas:**
 - Tkinteri kasutajaliidese struktuur (aken, lõuend, nupud, sildid)  
@@ -74,11 +74,11 @@ Mõlemad liikmed panustasid võrdselt projekti idee väljamõtlemisse. Otsustasi
 - Ridade kustutamine, skoori arvutamine ja taseme muutmine  
 - pygame'i integreerimine ja muusika lisamine
 
-### Testimine ja veaparandus  
+### 4. Testimine ja veaparandus  
 - Mõlemad testisid mängu käigus kõiki funktsioone  
 - Tähelepanu pöörati eelkõige "GAME OVER" funktsionaalsusele ja taaskäivitamise loogikale
 
-### Dokumentatsioon ja korraldus  
+### 5. Dokumentatsioon ja korraldus  
 - Projekti ülesanded ja tegevused hallati Trello kaudu  
 - Dokumentatsioon (README) koostati koos
 
