@@ -3,16 +3,16 @@ import random
 import tkinter.messagebox
 import pygame
 
-# Board configuration
-BOARD_WIDTH = 10  # number of columns
-BOARD_HEIGHT = 20  # number of rows
-CELL_SIZE = 30  # size of one cell in pixels
+# Game board dimensions and cell size
+BOARD_WIDTH = 10
+BOARD_HEIGHT = 20
+CELL_SIZE = 30
 
-# Time delay in milliseconds (normal and accelerated fall)
-DELAY = 500
-FAST_DELAY = 0.05
+# Delay settings for piece drop speed
+DELAY = 900
+FAST_DELAY = 50
 
-# Tetromino shapes definitions (2D arrays)
+# Tetromino shape definitions
 TETROMINOES = {
     'O': [[1, 1], [1, 1]],
     'I': [[1, 1, 1, 1]],
@@ -23,42 +23,38 @@ TETROMINOES = {
     'L': [[0, 0, 1], [1, 1, 1]],
 }
 
-# Color definitions: 0 = empty (black), 1 = filled (blue)
+# Color mapping for board values
 COLORS = {
     0: "black",
     1: "blue"
 }
 
-
 class TetrisGame:
     """
-    Class for creating and managing the Tetris game.
+    A class that implements the Tetris game.
     """
-
     def __init__(self):
         """
-        Initializes the Tetris game: creates the window, canvas, labels, button, and starts the game.
+        Initializes the Tetris game window, canvas, labels, and buttons.
+        It also loads the background music.
         """
-        # Create the main game window
+        # Initialize main window
         self.root = tk.Tk()
         self.root.title("Tetris")
 
-        # Calculate and create the game field (canvas)
+        # Create game canvas
         canvas_width = BOARD_WIDTH * CELL_SIZE + 4
         canvas_height = BOARD_HEIGHT * CELL_SIZE + 4
-        self.canvas = tk.Canvas(self.root, width=canvas_width,
-                                height=canvas_height, bg="black")
+        self.canvas = tk.Canvas(self.root, width=canvas_width, height=canvas_height, bg="black")
         self.canvas.pack()
 
-        # Score and level labels
-        self.score_label = tk.Label(self.root, text="Score: 0",
-                                    font=("Arial", 14), bg="black", fg="white")
+        # Create score and level labels
+        self.score_label = tk.Label(self.root, text="Score: 0", font=("Arial", 14), bg="black", fg="white")
         self.score_label.pack()
-        self.level_label = tk.Label(self.root, text="Level: 1",
-                                    font=("Arial", 14), bg="black", fg="white")
+        self.level_label = tk.Label(self.root, text="Level: 1", font=("Arial", 14), bg="black", fg="white")
         self.level_label.pack()
 
-        # Start button to begin the game
+        # Create start button
         self.start_button = tk.Button(
             self.root,
             text="START",
@@ -74,25 +70,24 @@ class TetrisGame:
         )
         self.start_button.place(relx=0.5, rely=0.7, anchor="center")
 
-        # Draws the TETRIS logo in pixel art
+        # Draw the TETRIS logo
         self.draw_tetris_logo()
 
-        # Initializes music using pygame
+        # Load and set background music
         pygame.mixer.init()
         pygame.mixer.music.load("tetris-theme-korobeiniki.mp3")
         pygame.mixer.music.set_volume(0.3)
 
-        # Starts the GUI event loop
+        # Start the Tkinter event loop
         self.root.mainloop()
 
     def draw_tetris_logo(self):
         """
-        Draws a large pixel-style "TETRIS" logo on the canvas.
+        Draws the Tetris logo on the canvas using pixel art style.
         """
+        # Display a pixel-style "TETRIS" logo on the canvas
         pixel_size = 10
-        offset_y = BOARD_HEIGHT * CELL_SIZE // 4  # vertical centering
-
-        # Letter patterns
+        offset_y = BOARD_HEIGHT * CELL_SIZE // 4
         letters = {
             'T': ["#####", "  #  ", "  #  ", "  #  ", "  #  "],
             'E': ["#####", "#    ", "#####", "#    ", "#####"],
@@ -100,13 +95,10 @@ class TetrisGame:
             'I': [" ### ", "  #  ", "  #  ", "  #  ", " ### "],
             'S': [" ####", "#    ", " ### ", "    #", "#### "],
         }
-
         word = "TETRIS"
         total_width = len(word) * 5
         canvas_width = self.canvas.winfo_reqwidth()
         offset_x = (canvas_width - total_width * pixel_size) // 2
-
-        # Draw each letter
         for idx, char in enumerate(word):
             pattern = letters.get(char)
             if not pattern:
@@ -118,26 +110,24 @@ class TetrisGame:
                         y0 = offset_y + row_idx * pixel_size
                         x1 = x0 + pixel_size
                         y1 = y0 + pixel_size
-                        self.canvas.create_rectangle(x0, y0, x1, y1,
-                                                     fill="#33B5FF",
-                                                     outline="black")
+                        self.canvas.create_rectangle(x0, y0, x1, y1, fill="#33B5FF", outline="black")
 
     def start_game(self):
         """
-        Removes the start screen and begins the game.
+        Destroys the start button and initiates the game.
         """
+        # Remove start button and start the game
         self.start_button.destroy()
         self.canvas.delete("all")
-        pygame.mixer.music.play(-1)  # play music indefinitely
+        pygame.mixer.music.play(-1)
         self.restart()
 
     def restart(self):
         """
-        Resets the game to its initial state.
+        Resets the game state and UI to start a new game.
         """
         # Reset game state
-        self.board = [[0 for _ in range(BOARD_WIDTH)] for _ in
-                      range(BOARD_HEIGHT)]
+        self.board = [[0 for _ in range(BOARD_WIDTH)] for _ in range(BOARD_HEIGHT)]
         self.shape = self.new_shape()
         self.pos = [BOARD_WIDTH // 2 - len(self.shape[0]) // 2, 0]
         self.score = 0
@@ -145,42 +135,37 @@ class TetrisGame:
         self.delay = DELAY
         self.running = True
         self.fast = False
-
-        # Update the user interface
         self.score_label.config(text="Score: 0")
         self.level_label.config(text="Level: 1")
         self.canvas.delete("gameover")
-
-        # Bind keyboard buttons and start the game loop
         self.root.bind("<Key>", self.key_press)
         self.game_loop()
 
     def new_shape(self):
         """
-        Returns a random tetromino shape.
+        Generates a new random Tetromino shape.
+
+        Returns:
+            list: A 2D list representing the Tetromino shape.
         """
+        # Get a random tetromino
         return random.choice(list(TETROMINOES.values()))
 
     def draw(self):
         """
-        Draws the game board and the currently falling shape.
+        Redraws the game board and the current Tetromino shape on the canvas.
         """
+        # Redraw the game board and current shape
         if not self.running:
             return
         self.canvas.delete("all")
-
-        # Draw the existing blocks
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH):
                 self.draw_cell(x, y, self.board[y][x])
-
-        # Draw the active shape
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
                     self.draw_cell(self.pos[0] + x, self.pos[1] + y, 1)
-
-        # Draw the border
         self.canvas.create_rectangle(
             1, 1,
             BOARD_WIDTH * CELL_SIZE + 2,
@@ -191,12 +176,14 @@ class TetrisGame:
 
     def draw_cell(self, x, y, value):
         """
-        Draws a single square at position (x, y) with the corresponding color.
+        Draws a single cell on the canvas with the specified color.
 
-        :param x: The x-coordinate of the square.
-        :param y: The y-coordinate of the square.
-        :param value: The value of the square (0 or 1), which determines the color.
+        Args:
+            x (int): The x-coordinate of the cell.
+            y (int): The y-coordinate of the cell.
+            value (int): The value representing the cell's color (0 for black, 1 for blue).
         """
+        # Draw a single cell on the canvas
         color = COLORS.get(value, "gray")
         x0 = x * CELL_SIZE + 2
         y0 = y * CELL_SIZE + 2
@@ -206,28 +193,32 @@ class TetrisGame:
 
     def key_press(self, event):
         """
-        Handles keyboard inputs.
+        Handles keyboard input events for controlling Tetromino movement.
 
-        :param event: The key press event object.
+        Args:
+            event (tkinter.Event): The keyboard event object.
         """
+        # Handle keyboard input
         if not self.running:
             return
         key = event.keysym.lower()
-        if key == 'a':  # left
+        if key == 'a':
             self.move(-1, 0)
-        elif key == 'd':  # right
+        elif key == 'd':
             self.move(1, 0)
-        elif key == 's':  # down
+        elif key == 's':
             self.move(0, 1)
-        elif key == 'w':  # rotate
+        elif key == 'w':
             self.rotate()
-        elif key == 'space':  # fast descent
+        elif key == 'space':
             self.fast = True
 
     def game_loop(self):
         """
-        The game loop, which calls itself again after a delay.
+        The main game loop that updates the game state and redraws the board.
+        It uses Tkinter's after() method to schedule the next iteration.
         """
+        # Main game loop using Tkinter after()
         if not self.running:
             return
         self.update()
@@ -238,8 +229,11 @@ class TetrisGame:
 
     def update(self):
         """
-        Attempts to move the shape, or fixes it in place if movement is not possible.
+        Updates the game state by moving the Tetromino shape down,
+        merging it with the board, clearing completed lines, and
+        generating the next shape.  Handles game over conditions.
         """
+        # Update game state by moving shape or merging
         if self.valid_move(0, 1):
             self.pos[1] += 1
         else:
@@ -255,33 +249,40 @@ class TetrisGame:
 
     def move(self, dx, dy):
         """
-        Moves the shape in the direction (dx, dy).
+        Moves the Tetromino shape on the board by the specified offset.
 
-        :param dx: Horizontal movement (-1, 0, or 1).
-        :param dy: Vertical movement (-1, 0, or 1).
+        Args:
+            dx (int): The horizontal offset (-1 for left, 1 for right, 0 for none).
+            dy (int): The vertical offset (-1 for up, 1 for down, 0 for none).
         """
+        # Move shape on board
         if self.valid_move(dx, dy):
             self.pos[0] += dx
             self.pos[1] += dy
 
     def rotate(self):
         """
-        Rotates the shape clockwise, if possible.
+        Rotates the Tetromino shape clockwise if the rotation is a valid move.
         """
+        # Rotate the current shape
         rotated = [list(row)[::-1] for row in zip(*self.shape)]
         old_shape = self.shape
         self.shape = rotated
         if not self.valid_move(0, 0):
-            self.shape = old_shape  # if the move is not allowed, restore the original shape
+            self.shape = old_shape
 
     def valid_move(self, dx, dy):
         """
-        Checks if the shape can move in the direction (dx, dy).
+        Checks if the Tetromino shape can move to the new position.
 
-        :param dx: Horizontal movement.
-        :param dy: Vertical movement.
-        :return: True if the move is valid, False otherwise.
+        Args:
+            dx (int): The horizontal offset.
+            dy (int): The vertical offset.
+
+        Returns:
+            bool: True if the move is valid, False otherwise.
         """
+        # Check if shape can move to new position
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -295,12 +296,17 @@ class TetrisGame:
 
     def valid_move_at(self, shape, pos):
         """
-        Checks if the shape can be placed at the given position.
+        Checks if a Tetromino shape can be placed at a specific position.  Used
+        to check if the new shape can be placed at the top of the board.
 
-        :param shape: The shape definition.
-        :param pos: The target position (x, y) for the shape.
-        :return: True if the placement is valid, False otherwise.
+        Args:
+            shape (list):  The Tetromino shape (2D list).
+            pos (tuple): The (x, y) position to check.
+
+        Returns:
+            bool: True if the move is valid, False otherwise.
         """
+        # Check if specific shape can be placed at specific position
         for y, row in enumerate(shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -314,8 +320,10 @@ class TetrisGame:
 
     def merge(self):
         """
-        Adds the shape to the game board.
+        Merges the current Tetromino shape with the game board.  This occurs
+        when a shape reaches the bottom of the board or lands on another shape.
         """
+        # Merge shape into the board
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -323,10 +331,11 @@ class TetrisGame:
 
     def clear_lines(self):
         """
-        Clears filled lines, updates the score, and adjusts the game speed.
+        Clears any completed lines from the board, updates the score,
+        and adjusts the game speed.
         """
-        new_board = [row for row in self.board if
-                     any(cell == 0 for cell in row)]
+        # Clear completed lines from board and update score
+        new_board = [row for row in self.board if any(cell == 0 for cell in row)]
         cleared = BOARD_HEIGHT - len(new_board)
         for _ in range(cleared):
             new_board.insert(0, [0] * BOARD_WIDTH)
@@ -337,8 +346,9 @@ class TetrisGame:
 
     def adjust_speed(self):
         """
-        Adjusts the game speed according to the level.
+        Adjusts the falling speed of the Tetromino shapes based on the player's score/level.
         """
+        # Adjust falling speed based on level
         new_level = self.score // 500 + 1
         new_delay = max(100, DELAY - (new_level - 1) * 50)
         if new_level != self.level:
@@ -349,12 +359,15 @@ class TetrisGame:
 
     def draw_pixel_text(self, text, y_offset=100, color="#33B5FF"):
         """
-        Displays a message (e.g., "GAME OVER") on the screen as large pixel text.
+        Draws pixelated text on the canvas, typically used for displaying
+        "GAME OVER" or other messages.
 
-        :param text: The text to display.
-        :param y_offset: Vertical offset for positioning the text.
-        :param color: The color of the text.
+        Args:
+            text (str): The text to display.
+            y_offset (int): The vertical offset for the text.
+            color (str): The color of the text.
         """
+        # Draw pixelated text (e.g., GAME OVER) in the canvas
         pixel_size = 10
         spacing = 1
         line_height = 6 * pixel_size
@@ -390,15 +403,14 @@ class TetrisGame:
                             y0 = y_offset_line + row_idx * pixel_size
                             x1 = x0 + pixel_size
                             y1 = y0 + pixel_size
-                            self.canvas.create_rectangle(x0, y0, x1, y1,
-                                                         fill=color,
-                                                         outline="black",
-                                                         tags="gameover")
+                            self.canvas.create_rectangle(x0, y0, x1, y1, fill=color, outline="black", tags="gameover")
 
     def game_over(self):
         """
-        Stops the game, displays "GAME OVER" text, and asks the user if they want to play again.
+        Handles the game over state: stops the game, displays "GAME OVER" message,
+        and prompts the player to play again.
         """
+        # Handle game over: stop game and show message
         self.running = False
         self.draw()
         self.draw_pixel_text("GAME\nOVER", y_offset=-20)
@@ -406,16 +418,17 @@ class TetrisGame:
 
     def show_restart_prompt(self):
         """
-        Displays a dialog box asking the user if they want to play again.
+        Displays a dialog box asking the player if they want to play again,
+        and either restarts the game or closes the application based on the response.
         """
-        response = tk.messagebox.askquestion("Game Over",
-                                             f"Your score: {self.score}\nPlay again?")
+        # Show restart dialog and act based on user response
+        response = tk.messagebox.askquestion("Game Over", f"Your score: {self.score}\nPlay again?")
         if response == "yes":
             self.restart()
         else:
             self.root.destroy()
 
-
-# Run the game
+# Start the game
 if __name__ == "__main__":
     TetrisGame()
+
