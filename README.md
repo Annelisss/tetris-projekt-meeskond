@@ -25,7 +25,7 @@ Mängu liides on loodud Tkinteri abil. Soovisime just klassikalist Tetrise versi
 Kasutaja vajutab "Alusta mängu" nuppu ja mängulaud ilmub.
 
 **Kasutajalugu 2 – Kujundi juhtimine**  
-Kasutaja juhib ülevalt alla kukkuvat kujundit klaviatuurinuppude abil: A – vasakule, D – paremale, W – pööramine, S – kiirem liikumine alla.
+Kasutaja juhib ülevalt alla liikuvat kujundit klaviatuurinuppude abil: A – vasakule, D – paremale, W – pööramine, S – kiirem liikumine alla, tühik (Space) – kujundi kiire langetus.
 
 **Kasutajalugu 3 – Rea täitumine ja eemaldamine**  
 Kui rida täitub, kustutab süsteem selle automaatselt ja lisab kasutajale skoori.
