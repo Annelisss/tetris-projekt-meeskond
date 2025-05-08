@@ -3,16 +3,16 @@ import random
 import tkinter.messagebox
 import pygame
 
-# Mängulaua mõõtmed ja ruudu suurus pikslites
-BOARD_WIDTH = 10     # veergude arv
-BOARD_HEIGHT = 20    # ridade arv
-CELL_SIZE = 30       # ühe ruudu suurus
+# Board configuration
+BOARD_WIDTH = 10  # number of columns
+BOARD_HEIGHT = 20  # number of rows
+CELL_SIZE = 30  # size of one cell in pixels
 
-# Aja viivitus millisekundites (tavaline ja kiirendatud langus)
+# Time delay in milliseconds (normal and accelerated fall)
 DELAY = 500
 FAST_DELAY = 0.05
 
-# Tetromino kujundite definitsioonid (2D massiivid)
+# Tetromino shapes definitions (2D arrays)
 TETROMINOES = {
     'O': [[1, 1], [1, 1]],
     'I': [[1, 1, 1, 1]],
@@ -23,31 +23,42 @@ TETROMINOES = {
     'L': [[0, 0, 1], [1, 1, 1]],
 }
 
-# Värvide määramine: 0 = tühi (must), 1 = täidetud (sinine)
+# Color definitions: 0 = empty (black), 1 = filled (blue)
 COLORS = {
     0: "black",
     1: "blue"
 }
 
+
 class TetrisGame:
+    """
+    Class for creating and managing the Tetris game.
+    """
+
     def __init__(self):
-        # Loo mängu põhiaken
+        """
+        Initializes the Tetris game: creates the window, canvas, labels, button, and starts the game.
+        """
+        # Create the main game window
         self.root = tk.Tk()
         self.root.title("Tetris")
 
-        # Arvuta ja loo mänguväli (canvas)
+        # Calculate and create the game field (canvas)
         canvas_width = BOARD_WIDTH * CELL_SIZE + 4
         canvas_height = BOARD_HEIGHT * CELL_SIZE + 4
-        self.canvas = tk.Canvas(self.root, width=canvas_width, height=canvas_height, bg="black")
+        self.canvas = tk.Canvas(self.root, width=canvas_width,
+                                height=canvas_height, bg="black")
         self.canvas.pack()
 
-        # Skoori ja taseme sildid (labelid)
-        self.score_label = tk.Label(self.root, text="Score: 0", font=("Arial", 14), bg="black", fg="white")
+        # Score and level labels
+        self.score_label = tk.Label(self.root, text="Score: 0",
+                                    font=("Arial", 14), bg="black", fg="white")
         self.score_label.pack()
-        self.level_label = tk.Label(self.root, text="Level: 1", font=("Arial", 14), bg="black", fg="white")
+        self.level_label = tk.Label(self.root, text="Level: 1",
+                                    font=("Arial", 14), bg="black", fg="white")
         self.level_label.pack()
 
-        # Start-nupp mängu alustamiseks
+        # Start button to begin the game
         self.start_button = tk.Button(
             self.root,
             text="START",
@@ -63,23 +74,25 @@ class TetrisGame:
         )
         self.start_button.place(relx=0.5, rely=0.7, anchor="center")
 
-        # Joonista pikselgraafikas TETRIS logo
+        # Draws the TETRIS logo in pixel art
         self.draw_tetris_logo()
 
-        # Initsialiseeri muusika pygame abil
+        # Initializes music using pygame
         pygame.mixer.init()
         pygame.mixer.music.load("tetris-theme-korobeiniki.mp3")
         pygame.mixer.music.set_volume(0.3)
 
-        # Käivita GUI sündmuste tsükkel
+        # Starts the GUI event loop
         self.root.mainloop()
 
     def draw_tetris_logo(self):
-        # Joonista suur pikselstiilis "TETRIS" logo canvas'ile
+        """
+        Draws a large pixel-style "TETRIS" logo on the canvas.
+        """
         pixel_size = 10
-        offset_y = BOARD_HEIGHT * CELL_SIZE // 4  # vertikaalne tsentreerimine
+        offset_y = BOARD_HEIGHT * CELL_SIZE // 4  # vertical centering
 
-        # Tähtede mustrid
+        # Letter patterns
         letters = {
             'T': ["#####", "  #  ", "  #  ", "  #  ", "  #  "],
             'E': ["#####", "#    ", "#####", "#    ", "#####"],
@@ -93,7 +106,7 @@ class TetrisGame:
         canvas_width = self.canvas.winfo_reqwidth()
         offset_x = (canvas_width - total_width * pixel_size) // 2
 
-        # Joonista iga täht
+        # Draw each letter
         for idx, char in enumerate(word):
             pattern = letters.get(char)
             if not pattern:
@@ -105,18 +118,26 @@ class TetrisGame:
                         y0 = offset_y + row_idx * pixel_size
                         x1 = x0 + pixel_size
                         y1 = y0 + pixel_size
-                        self.canvas.create_rectangle(x0, y0, x1, y1, fill="#33B5FF", outline="black")
+                        self.canvas.create_rectangle(x0, y0, x1, y1,
+                                                     fill="#33B5FF",
+                                                     outline="black")
 
     def start_game(self):
-        # Eemalda avaleht ja alusta mängu
+        """
+        Removes the start screen and begins the game.
+        """
         self.start_button.destroy()
         self.canvas.delete("all")
-        pygame.mixer.music.play(-1)  # taasesita muusikat lõputult
+        pygame.mixer.music.play(-1)  # play music indefinitely
         self.restart()
 
     def restart(self):
-        # Taasta mängu algseis
-        self.board = [[0 for _ in range(BOARD_WIDTH)] for _ in range(BOARD_HEIGHT)]
+        """
+        Resets the game to its initial state.
+        """
+        # Reset game state
+        self.board = [[0 for _ in range(BOARD_WIDTH)] for _ in
+                      range(BOARD_HEIGHT)]
         self.shape = self.new_shape()
         self.pos = [BOARD_WIDTH // 2 - len(self.shape[0]) // 2, 0]
         self.score = 0
@@ -125,37 +146,41 @@ class TetrisGame:
         self.running = True
         self.fast = False
 
-        # Värskenda kasutajaliidest
+        # Update the user interface
         self.score_label.config(text="Score: 0")
         self.level_label.config(text="Level: 1")
         self.canvas.delete("gameover")
 
-        # Seosta klahvinupud ja käivita mängutsükkel
+        # Bind keyboard buttons and start the game loop
         self.root.bind("<Key>", self.key_press)
         self.game_loop()
 
     def new_shape(self):
-        # Tagasta suvaline tetromino kujund
+        """
+        Returns a random tetromino shape.
+        """
         return random.choice(list(TETROMINOES.values()))
 
     def draw(self):
-        # Joonista mängulaud ja hetkel langev kujund
+        """
+        Draws the game board and the currently falling shape.
+        """
         if not self.running:
             return
         self.canvas.delete("all")
 
-        # Joonista olemasolevad kivid
+        # Draw the existing blocks
         for y in range(BOARD_HEIGHT):
             for x in range(BOARD_WIDTH):
                 self.draw_cell(x, y, self.board[y][x])
 
-        # Joonista aktiivne kujund
+        # Draw the active shape
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
                     self.draw_cell(self.pos[0] + x, self.pos[1] + y, 1)
 
-        # Joonista piir
+        # Draw the border
         self.canvas.create_rectangle(
             1, 1,
             BOARD_WIDTH * CELL_SIZE + 2,
@@ -165,7 +190,13 @@ class TetrisGame:
         )
 
     def draw_cell(self, x, y, value):
-        # Joonista üks ruut positsioonil (x, y) vastava värviga
+        """
+        Draws a single square at position (x, y) with the corresponding color.
+
+        :param x: The x-coordinate of the square.
+        :param y: The y-coordinate of the square.
+        :param value: The value of the square (0 or 1), which determines the color.
+        """
         color = COLORS.get(value, "gray")
         x0 = x * CELL_SIZE + 2
         y0 = y * CELL_SIZE + 2
@@ -174,23 +205,29 @@ class TetrisGame:
         self.canvas.create_rectangle(x0, y0, x1, y1, fill=color, outline="gray")
 
     def key_press(self, event):
-        # Töötle klaviatuurisisendeid
+        """
+        Handles keyboard inputs.
+
+        :param event: The key press event object.
+        """
         if not self.running:
             return
         key = event.keysym.lower()
-        if key == 'a':  # vasakule
+        if key == 'a':  # left
             self.move(-1, 0)
-        elif key == 'd':  # paremale
+        elif key == 'd':  # right
             self.move(1, 0)
-        elif key == 's':  # alla
+        elif key == 's':  # down
             self.move(0, 1)
-        elif key == 'w':  # pööra
+        elif key == 'w':  # rotate
             self.rotate()
-        elif key == 'space':  # kiirlaskumine
+        elif key == 'space':  # fast descent
             self.fast = True
 
     def game_loop(self):
-        # Mängutsükkel, mis kutsub end uuesti pärast viivitust
+        """
+        The game loop, which calls itself again after a delay.
+        """
         if not self.running:
             return
         self.update()
@@ -200,7 +237,9 @@ class TetrisGame:
         self.root.after(delay, self.game_loop)
 
     def update(self):
-        # Proovi kujundit liigutada või fikseeri see
+        """
+        Attempts to move the shape, or fixes it in place if movement is not possible.
+        """
         if self.valid_move(0, 1):
             self.pos[1] += 1
         else:
@@ -215,21 +254,34 @@ class TetrisGame:
                 self.pos = next_pos
 
     def move(self, dx, dy):
-        # Liiguta kujundit suunas (dx, dy)
+        """
+        Moves the shape in the direction (dx, dy).
+
+        :param dx: Horizontal movement (-1, 0, or 1).
+        :param dy: Vertical movement (-1, 0, or 1).
+        """
         if self.valid_move(dx, dy):
             self.pos[0] += dx
             self.pos[1] += dy
 
     def rotate(self):
-        # Pööra kujundit päripäeva
+        """
+        Rotates the shape clockwise, if possible.
+        """
         rotated = [list(row)[::-1] for row in zip(*self.shape)]
         old_shape = self.shape
         self.shape = rotated
         if not self.valid_move(0, 0):
-            self.shape = old_shape  # kui liigutus pole lubatud, taasta
+            self.shape = old_shape  # if the move is not allowed, restore the original shape
 
     def valid_move(self, dx, dy):
-        # Kontrolli, kas liigutus (dx, dy) on kehtiv
+        """
+        Checks if the shape can move in the direction (dx, dy).
+
+        :param dx: Horizontal movement.
+        :param dy: Vertical movement.
+        :return: True if the move is valid, False otherwise.
+        """
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -242,7 +294,13 @@ class TetrisGame:
         return True
 
     def valid_move_at(self, shape, pos):
-        # Kontrolli, kas kujundit saab paigutada antud asukohta
+        """
+        Checks if the shape can be placed at the given position.
+
+        :param shape: The shape definition.
+        :param pos: The target position (x, y) for the shape.
+        :return: True if the placement is valid, False otherwise.
+        """
         for y, row in enumerate(shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -255,15 +313,20 @@ class TetrisGame:
         return True
 
     def merge(self):
-        # Lisa kujund mängulauale
+        """
+        Adds the shape to the game board.
+        """
         for y, row in enumerate(self.shape):
             for x, cell in enumerate(row):
                 if cell:
                     self.board[self.pos[1] + y][self.pos[0] + x] = 1
 
     def clear_lines(self):
-        # Kustuta täidetud read ja uuenda skoori
-        new_board = [row for row in self.board if any(cell == 0 for cell in row)]
+        """
+        Clears filled lines, updates the score, and adjusts the game speed.
+        """
+        new_board = [row for row in self.board if
+                     any(cell == 0 for cell in row)]
         cleared = BOARD_HEIGHT - len(new_board)
         for _ in range(cleared):
             new_board.insert(0, [0] * BOARD_WIDTH)
@@ -273,7 +336,9 @@ class TetrisGame:
         self.adjust_speed()
 
     def adjust_speed(self):
-        # Kohanda kiirust vastavalt tasemele
+        """
+        Adjusts the game speed according to the level.
+        """
         new_level = self.score // 500 + 1
         new_delay = max(100, DELAY - (new_level - 1) * 50)
         if new_level != self.level:
@@ -283,7 +348,13 @@ class TetrisGame:
             self.delay = new_delay
 
     def draw_pixel_text(self, text, y_offset=100, color="#33B5FF"):
-        # Kuvab ekraanile suure pikseltekstina sõnumi (nt "GAME OVER")
+        """
+        Displays a message (e.g., "GAME OVER") on the screen as large pixel text.
+
+        :param text: The text to display.
+        :param y_offset: Vertical offset for positioning the text.
+        :param color: The color of the text.
+        """
         pixel_size = 10
         spacing = 1
         line_height = 6 * pixel_size
@@ -319,23 +390,32 @@ class TetrisGame:
                             y0 = y_offset_line + row_idx * pixel_size
                             x1 = x0 + pixel_size
                             y1 = y0 + pixel_size
-                            self.canvas.create_rectangle(x0, y0, x1, y1, fill=color, outline="black", tags="gameover")
+                            self.canvas.create_rectangle(x0, y0, x1, y1,
+                                                         fill=color,
+                                                         outline="black",
+                                                         tags="gameover")
 
     def game_over(self):
-        # Peata mäng ja kuva mängu lõpp
+        """
+        Stops the game, displays "GAME OVER" text, and asks the user if they want to play again.
+        """
         self.running = False
         self.draw()
         self.draw_pixel_text("GAME\nOVER", y_offset=-20)
         self.root.after(1000, self.show_restart_prompt)
 
     def show_restart_prompt(self):
-        # Küsi kasutajalt, kas ta tahab uuesti mängida
-        response = tk.messagebox.askquestion("Game Over", f"Your score: {self.score}\nPlay again?")
+        """
+        Displays a dialog box asking the user if they want to play again.
+        """
+        response = tk.messagebox.askquestion("Game Over",
+                                             f"Your score: {self.score}\nPlay again?")
         if response == "yes":
             self.restart()
         else:
             self.root.destroy()
 
-# Programmi käivitamine
+
+# Run the game
 if __name__ == "__main__":
     TetrisGame()
