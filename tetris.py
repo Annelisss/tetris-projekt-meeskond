@@ -8,9 +8,12 @@ BOARD_WIDTH = 10
 BOARD_HEIGHT = 20
 CELL_SIZE = 30
 
-# Delay settings for piece drop speed
-DELAY = 900
+# Initial delay settings for piece drop speed in milliseconds
+INITIAL_DELAY = 900
 FAST_DELAY = 50
+DELAY_DECREMENT = 50  # Reduced delay decrement for smoother speed increase
+SCORE_THRESHOLD = 1000  # Score needed to increase speed
+LEVEL_THRESHOLD = 500 #score increase per level
 
 # Tetromino shape definitions
 TETROMINOES = {
@@ -132,7 +135,7 @@ class TetrisGame:
         self.pos = [BOARD_WIDTH // 2 - len(self.shape[0]) // 2, 0]
         self.score = 0
         self.level = 1
-        self.delay = DELAY
+        self.delay = INITIAL_DELAY  # Use initial delay here
         self.running = True
         self.fast = False
         self.score_label.config(text="Score: 0")
@@ -349,13 +352,10 @@ class TetrisGame:
         Adjusts the falling speed of the Tetromino shapes based on the player's score/level.
         """
         # Adjust falling speed based on level
-        new_level = self.score // 500 + 1
-        new_delay = max(100, DELAY - (new_level - 1) * 50)
-        if new_level != self.level:
-            self.level = new_level
+        if self.score >= self.level * SCORE_THRESHOLD: # Check if score is greater than or equal to level * 1000
+            self.level += 1
+            self.delay = max(100, INITIAL_DELAY - self.level * DELAY_DECREMENT)  # Decrease delay, but not below 100
             self.level_label.config(text=f"Level: {self.level}")
-        if new_delay != self.delay:
-            self.delay = new_delay
 
     def draw_pixel_text(self, text, y_offset=100, color="#33B5FF"):
         """
@@ -431,4 +431,3 @@ class TetrisGame:
 # Start the game
 if __name__ == "__main__":
     TetrisGame()
-
