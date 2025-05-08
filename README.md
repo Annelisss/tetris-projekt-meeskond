@@ -82,5 +82,43 @@ Mõlemad liikmed panustasid võrdselt projekti idee väljamõtlemisse. Otsustasi
 - Projekti ülesanded ja tegevused hallati Trello kaudu  
 - Dokumentatsioon (README) koostati koos
 
+
+## 10. Mängu juhend
+
+### Mängu käivitamine:
+
+1. Ava **Visual Studio Code** või mõni muu Pythoniga ühilduv arenduskeskkond.
+2. Otsi fail `tetris.py` ja tee sellel **paremklõps**.
+3. Vali menüüst **"Run Python File"** või kasuta terminalis käsku:
+
+   ```bash
+   python tetris.py
+   ```
+4. Ilmuvas aknas vajuta **START** nuppu, et mäng alustada.
+
+### Juhtimine klaviatuuriga:
+
+* **A** – liiguta kujund **vasakule**
+* **D** – liiguta kujund **paremale**
+* **W** – **pööra** kujundit päripäeva
+* **S** – liiguta kujund **ühe sammu võrra alla**
+* **Tühik (Space)** – **kiire kukkumine** otse alla
+
+### Mängu eesmärk:
+
+* Eesmärk on **täita horisontaalseid ridu** kukkuvate kujunditega.
+* Täidetud rida **kustutatakse automaatselt** ja saad punkte.
+* Iga 1000 punkti korral tõuseb mängu **tase** ja kujundid kukuvad kiiremini.
+* Mäng lõppeb, kui uus kujund **ei mahu enam mänguväljale**.
+
+### Mängu lõpp ja uuesti mängimine:
+
+* Kui mäng lõppeb, kuvatakse **"GAME OVER"** tekst.
+* Ekraanile ilmub küsimus: **"Play again?"**
+
+  * Kui valid **Yes**, mäng **alustab uuesti**.
+  * Kui valid **No**, mänguaken **sulgub**.
+
+
 ## Kokkuvõte  
 Projekt valmis meeskonnatööna. Mõlemad liikmed panustasid aktiivselt ja järjepidevalt kõikidesse tööetappidesse. Tööjaotus võimaldas keskenduda olulistele arendusülesannetele ning tõstis lõpptulemuse kvaliteeti.
