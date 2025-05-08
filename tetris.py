@@ -10,7 +10,7 @@ CELL_SIZE = 30
 
 # Delay settings for piece drop speed
 DELAY = 900
-FAST_DELAY = 120
+FAST_DELAY = 50
 
 # Tetromino shape definitions
 TETROMINOES = {
