@@ -210,7 +210,7 @@ class TetrisGame:
         elif key == 'd':
             self.move(1, 0)
         elif key == 's':
-            self.move(0, 1)
+            self.move(0, 3)
         elif key == 'w':
             self.rotate()
         elif key == 'space':
@@ -421,7 +421,6 @@ class TetrisGame:
         Displays a dialog box asking the player if they want to play again,
         and either restarts the game or closes the application based on the response.
         """
-        # Show restart dialog and act based on user response
         response = tk.messagebox.askquestion("Game Over", f"Your score: {self.score}\nPlay again?")
         if response == "yes":
             self.restart()
